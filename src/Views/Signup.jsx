@@ -1,15 +1,43 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import axios from "axios";
+import Cookies from "js-cookie";
+import * as jwt  from 'jwt-decode'
 
 const Signup = () => {
+  const navigate = useNavigate();
+  const [error, setError] = useState(null);
+  async function signup(name, email, password) {
+    const user_credentials = {
+      name,
+      email,
+      password,
+    };
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5050/auth/signup",
+        user_credentials
+      );
+      if (response) {
+        const token = response.data.token;
+        const userId = jwt.jwtDecode(token).id;
+        Cookies.set("token", token, { expires: 7, secure: true });
+        Cookies.set("user", userId, { expires: 7, secure: true });
+        navigate("/");
+      }
+    } catch (error) {
+      setError(error.response.data.message);
+    }
+  }
   //defining a form instance
   const formik = useFormik({
     initialValues: {
       username: "",
       email: "",
-      password: ""
+      password: "",
     },
     validationSchema: Yup.object({
       email: Yup.string()
@@ -23,7 +51,7 @@ const Signup = () => {
         .required("Password required"),
     }),
     onSubmit: (values) => {
-      console.log(values.email, values.username, values.password);
+      signup(values.username, values.email, values.password);
     },
   });
 
@@ -34,6 +62,7 @@ const Signup = () => {
           <h1 className="text-3xl font-semibold">SIGNUP</h1>
           <p className="text-sm">Sign up to make an account with us</p>
         </div>
+        {error ? <p className="text-red-500 text-center">{error}</p> : ""}
         <form onSubmit={formik.handleSubmit} className="form-group">
           <div className="form-field">
             <label className="form-label">Email address</label>

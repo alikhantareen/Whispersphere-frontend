@@ -1,9 +1,36 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import axios from "axios";
+import Cookies from "js-cookie";
+import * as jwt  from 'jwt-decode'
 
 const Login = () => {
+  const navigate = useNavigate();
+  const [error, setError] = useState(null);
+
+  async function login(email, password) {
+    const user_credentials = {
+      email,
+      password,
+    };
+    try {
+      const response = await axios.post(
+        "http://localhost:5050/auth/login",
+        user_credentials
+      );
+      if (response) {
+        const token = response.data.token;
+        const userId = jwt.jwtDecode(token).id;
+        Cookies.set("token", token, { expires: 7, secure: true });
+        Cookies.set("user", userId, { expires: 7, secure: true });
+        navigate("/");
+      }
+    } catch (error) {
+      setError(error.response.data.message);
+    }
+  }
 
   //defining a form instance
   const formik = useFormik({
@@ -15,11 +42,10 @@ const Login = () => {
       email: Yup.string()
         .email("Invalid email address")
         .required("Email required"),
-      password: Yup.string()
-        .required("Password required"),
+      password: Yup.string().required("Password required"),
     }),
     onSubmit: (values) => {
-      console.log(values.email, values.password);
+      login(values.email, values.password);
     },
   });
 
@@ -30,6 +56,7 @@ const Login = () => {
           <h1 className="text-3xl font-semibold">LOGIN</h1>
           <p className="text-sm">Log in to access your account</p>
         </div>
+        {error ? <p className="text-red-500 text-center">{error}</p> : ""}
         <form onSubmit={formik.handleSubmit} className="form-group">
           <div className="form-field">
             <label className="form-label">Email address</label>

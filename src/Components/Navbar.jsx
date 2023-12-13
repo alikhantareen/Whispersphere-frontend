@@ -1,11 +1,27 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const userId = Cookies.get("user");
+
+  function logout() {
+    Cookies.remove("token");
+    navigate("/login");
+  }
+
+  useEffect(() => {
+    if (!Cookies.get("token")) {
+      navigate("/login");
+    }
+  }, []);
   return (
     <div className="navbar rounded-lg">
       <div className="navbar-start">
-        <Link to={"/"} className="navbar-item">Ripple UI</Link>
+        <Link to={"/"} className="navbar-item">
+          Ripple UI
+        </Link>
       </div>
       <div className="navbar-end">
         <div className="avatar avatar-ring avatar-md">
@@ -21,8 +37,17 @@ const Navbar = () => {
                 />
               </label>
               <div className="dropdown-menu dropdown-menu-bottom-left">
-                <Link to={"/profile"} className="dropdown-item text-sm">Profile</Link>
-                <Link tabIndex="-1" className="dropdown-item text-sm">
+                <Link
+                  to={`/profile/${userId}`}
+                  className="dropdown-item text-sm"
+                >
+                  Profile
+                </Link>
+                <Link
+                  onClick={logout}
+                  tabIndex="-1"
+                  className="dropdown-item text-sm"
+                >
                   Logout
                 </Link>
               </div>
