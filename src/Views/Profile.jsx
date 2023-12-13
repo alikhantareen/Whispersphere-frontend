@@ -1,9 +1,9 @@
 import React from "react";
 import Navbar from "../Components/Navbar";
-import { Typography } from "@material-tailwind/react";
+import { Typography, Button } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
 import avatar from "../assets/avatar.png";
-import BlogsSection from "../Components/Blogs-section";
+import Card from "../Components/Card";
 
 const Profile = () => {
   return (
@@ -26,11 +26,18 @@ const Profile = () => {
             </Link>
           </span>
           <Link>
-            <button className="btn btn-solid-primary">Create a blog</button>
+            <Button color="teal" variant="gradient">
+              Create a blog
+            </Button>
           </Link>
         </section>
         <section className="flex justify-start items-center gap-4 w-full md:max-w-[68rem]">
-          <BlogsSection title="My Blogs" />
+          <div className="flex flex-col gap-4">
+            <Typography variant="h1" color="white" className="underline">
+              My Blogs
+            </Typography>
+            <Card />
+          </div>
         </section>
       </section>
     </main>
