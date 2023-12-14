@@ -12,8 +12,6 @@ import Cookies from "js-cookie";
 const Profile = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [user, setUser] = useState({});
-  const [loadUser, setLoadUser] = useState(true);
   //query hook for caching the api's data
   const { isPending, data } = useQuery({
     queryKey: ["user_blogs"],
@@ -25,25 +23,18 @@ const Profile = () => {
   //the following function will fetch the data for the user's blog
   async function getUserBlogs(id) {
     try {
-      const response = await axios.get(
+      const user_blogs = await axios.get(
         `http://localhost:5050/api/blogs/user-profile/${id}`
       );
-      const { data } = response;
-      return data;
-    } catch (error) {
-      console.warn(error);
-    }
-  }
-
-  //the following function will get the user's data
-  async function getUserData(id) {
-    try {
-      const response = await axios.get(
+      const user_data = await axios.get(
         `http://localhost:5050/auth/get-user/${id}`
       );
-      const { data } = response;
-      setUser({ ...data });
-      setLoadUser(false);
+      const blogs = user_blogs.data;
+      const userInfo = user_data.data;
+      return {
+        blogs,
+        userInfo,
+      };
     } catch (error) {
       console.warn(error);
     }
@@ -53,7 +44,6 @@ const Profile = () => {
     if (!Cookies.get("token")) {
       navigate("/");
     }
-    getUserData(id);
   }, []);
 
   return (
@@ -63,17 +53,19 @@ const Profile = () => {
         <section className="flex justify-start items-center gap-4 w-full md:max-w-[68rem]">
           <img src={avatar} width={80} alt="avatar" loading="lazy" />
           <Typography variant="h1" color="white">
-            {loadUser ? <span>...</span> : user.name.toUpperCase()}
+            {isPending ? <span>...</span> : data.userInfo.name.toUpperCase()}
           </Typography>
         </section>
         <section className="flex justify-between items-center gap-4 w-full md:max-w-[68rem]">
           <span className="flex gap-4 items-center">
             <Typography variant="small">
-              Followers: {loadUser ? <span>...</span> : user.followers.length}
+              Followers:{" "}
+              {isPending ? <span>...</span> : data.userInfo.followers.length}
             </Typography>
             <Link to={"/"}>
               <Typography className="link" variant="small">
-                Following: {loadUser ? <span>...</span> : user.following.length}
+                Following:{" "}
+                {isPending ? <span>...</span> : data.userInfo.following.length}
               </Typography>
             </Link>
           </span>
@@ -90,12 +82,12 @@ const Profile = () => {
             </Typography>
             {isPending ? (
               <Loader />
-            ) : data.length === 0 ? (
+            ) : data.blogs.length === 0 ? (
               <Typography variant="paragraph" color="gray">
                 No blogs to show.
               </Typography>
             ) : (
-              data.map((elem, index) => {
+              data.blogs.map((elem, index) => {
                 return (
                   <Link key={index} to={`/single-blog/${elem._id}`}>
                     <Card title={elem.title} description={elem.description} />
