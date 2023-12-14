@@ -15,7 +15,7 @@ const Navbar = () => {
   return (
     <div className="navbar rounded-lg">
       <div className="navbar-start">
-        <Link to={"/"} className="navbar-item font-semibold text-xl">
+        <Link to={"/"} className="navbar-item font-semibold text-xl text-[#6c9d98]">
           Whispersphere
         </Link>
       </div>

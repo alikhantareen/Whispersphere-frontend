@@ -41,7 +41,7 @@ const SingleBlog = () => {
             loading="lazy"
           />
           <section className="p-2 w-full flex flex-col gap-4 justify-center rounded-lg max-w-[68rem]">
-            <Typography variant="h1">{data.title}</Typography>
+            <Typography className="text-[#6c9d98]" variant="h1">{data.title}</Typography>
             <Typography variant="paragraph">
               {data.description}
               <span className="text-slate-500 italic">

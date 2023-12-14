@@ -4,7 +4,7 @@ function BlogCard({ title, description }) {
   return (
     <Card className="w-full overflow-hidden bg-[#161616]">
       <CardBody>
-        <Typography variant="h2" color="white">
+        <Typography variant="h2" className="text-[#6c9d98]">
           {title}
         </Typography>
         <Typography variant="small" color="white" className="mt-3">

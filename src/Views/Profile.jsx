@@ -12,16 +12,17 @@ import Cookies from "js-cookie";
 const Profile = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+
   //query hook for caching the api's data
   const { isPending, data } = useQuery({
     queryKey: ["user_blogs"],
-    queryFn: () => getUserBlogs(id),
+    queryFn: () => getUserData(id),
     refetchOnWindowFocus: false,
     refetchIntervalInBackground: true,
   });
 
   //the following function will fetch the data for the user's blog
-  async function getUserBlogs(id) {
+  async function getUserData(id) {
     try {
       const user_blogs = await axios.get(
         `http://localhost:5050/api/blogs/user-profile/${id}`
@@ -52,7 +53,7 @@ const Profile = () => {
       <section className="flex flex-col gap-8 p-4 justify-center items-center mt-4">
         <section className="flex justify-start items-center gap-4 w-full md:max-w-[68rem]">
           <img src={avatar} width={80} alt="avatar" loading="lazy" />
-          <Typography variant="h1" color="white">
+          <Typography variant="h1" className="text-[#6c9d98]">
             {isPending ? <span>...</span> : data.userInfo.name.toUpperCase()}
           </Typography>
         </section>
@@ -77,7 +78,7 @@ const Profile = () => {
         </section>
         <section className="flex justify-start items-center gap-4 w-full md:max-w-[68rem]">
           <div className="flex flex-col gap-4">
-            <Typography variant="h1" color="white" className="underline">
+            <Typography variant="h1" className="underline text-[#6c9d98]">
               My Blogs
             </Typography>
             {isPending ? (
