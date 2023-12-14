@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import Cookies from "js-cookie";
 import * as jwt  from 'jwt-decode'
+import { Button } from "@material-tailwind/react";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -59,7 +60,7 @@ const Signup = () => {
     <div className="w-screen h-screen flex justify-center items-center">
       <div className="mx-auto flex w-full max-w-sm flex-col gap-6">
         <div className="flex flex-col items-center">
-          <h1 className="text-3xl font-semibold">SIGNUP</h1>
+          <h1 className="text-3xl font-semibold text-[#6c9d98]">SIGNUP</h1>
           <p className="text-sm">Sign up to make an account with us</p>
         </div>
         {error ? <p className="text-red-500 text-center">{error}</p> : ""}
@@ -114,9 +115,14 @@ const Signup = () => {
           </div>
           <div className="form-field pt-5">
             <div className="form-control justify-between">
-              <button type="submit" className="btn btn-primary w-full">
-                Sign in
-              </button>
+            <Button
+                type="submit"
+                color="teal"
+                variant="gradient"
+                className="w-full"
+              >
+                Sign up
+              </Button>
             </div>
           </div>
 
@@ -124,7 +130,7 @@ const Signup = () => {
             <div className="form-control justify-center">
               <Link
                 to={"/login"}
-                className="link link-underline-hover link-primary text-sm"
+                className="link link-underline-hover text-sm"
               >
                 Already have an account yet? Log in.
               </Link>

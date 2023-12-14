@@ -4,6 +4,7 @@ import Signup from "./Views/Signup";
 import Home from "./Views/Home";
 import SingleBlog from "./Views/SingleBlog";
 import Profile from "./Views/Profile";
+import AddBlog from "./Views/AddBlog";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/profile/:id" element={<Profile />} />
         <Route path="/single-blog/:id" element={<SingleBlog />} />
+        <Route path="addblog" element={<AddBlog />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
       </Routes>

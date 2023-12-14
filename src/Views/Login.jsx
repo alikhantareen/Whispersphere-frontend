@@ -4,7 +4,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import Cookies from "js-cookie";
-import * as jwt  from 'jwt-decode'
+import * as jwt from "jwt-decode";
+import { Button } from "@material-tailwind/react";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -53,7 +54,7 @@ const Login = () => {
     <div className="w-screen h-screen flex justify-center items-center">
       <div className="mx-auto flex w-full max-w-sm flex-col gap-6">
         <div className="flex flex-col items-center">
-          <h1 className="text-3xl font-semibold">LOGIN</h1>
+          <h1 className="text-3xl font-semibold text-[#6c9d98]">LOGIN</h1>
           <p className="text-sm">Log in to access your account</p>
         </div>
         {error ? <p className="text-red-500 text-center">{error}</p> : ""}
@@ -92,9 +93,14 @@ const Login = () => {
           </div>
           <div className="form-field pt-5">
             <div className="form-control justify-between">
-              <button type="submit" className="btn btn-primary w-full">
+              <Button
+                type="submit"
+                color="teal"
+                variant="gradient"
+                className="w-full"
+              >
                 Log in
-              </button>
+              </Button>
             </div>
           </div>
 
@@ -102,7 +108,7 @@ const Login = () => {
             <div className="form-control justify-center">
               <Link
                 to={"/signup"}
-                className="link link-underline-hover link-primary text-sm"
+                className="link link-underline-hover text-sm"
               >
                 Don't have an account yet? Sign up.
               </Link>

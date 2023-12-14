@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../Components/Navbar";
 import { Typography, Button } from "@material-tailwind/react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import avatar from "../assets/avatar.png";
 import Card from "../Components/Card";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Loader from "../Components/Loader";
+import Cookies from "js-cookie";
 
 const Profile = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [user, setUser] = useState({});
   const [loadUser, setLoadUser] = useState(true);
@@ -40,7 +42,7 @@ const Profile = () => {
         `http://localhost:5050/auth/get-user/${id}`
       );
       const { data } = response;
-      setUser({...data});
+      setUser({ ...data });
       setLoadUser(false);
     } catch (error) {
       console.warn(error);
@@ -48,6 +50,9 @@ const Profile = () => {
   }
 
   useEffect(() => {
+    if (!Cookies.get("token")) {
+      navigate("/");
+    }
     getUserData(id);
   }, []);
 
@@ -63,14 +68,16 @@ const Profile = () => {
         </section>
         <section className="flex justify-between items-center gap-4 w-full md:max-w-[68rem]">
           <span className="flex gap-4 items-center">
-            <Typography variant="small">Followers: {loadUser ? <span>...</span> : user.followers.length}</Typography>
+            <Typography variant="small">
+              Followers: {loadUser ? <span>...</span> : user.followers.length}
+            </Typography>
             <Link to={"/"}>
               <Typography className="link" variant="small">
                 Following: {loadUser ? <span>...</span> : user.following.length}
               </Typography>
             </Link>
           </span>
-          <Link>
+          <Link to={"/addblog"}>
             <Button color="teal" variant="gradient">
               Create a blog
             </Button>

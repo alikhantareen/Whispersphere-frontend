@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
@@ -8,19 +8,15 @@ const Navbar = () => {
 
   function logout() {
     Cookies.remove("token");
+    Cookies.remove("user");
     navigate("/login");
   }
 
-  useEffect(() => {
-    if (!Cookies.get("token")) {
-      navigate("/login");
-    }
-  }, []);
   return (
     <div className="navbar rounded-lg">
       <div className="navbar-start">
-        <Link to={"/"} className="navbar-item">
-          Ripple UI
+        <Link to={"/"} className="navbar-item font-semibold text-xl">
+          Whispersphere
         </Link>
       </div>
       <div className="navbar-end">
@@ -37,19 +33,31 @@ const Navbar = () => {
                 />
               </label>
               <div className="dropdown-menu dropdown-menu-bottom-left">
-                <Link
-                  to={`/profile/${userId}`}
-                  className="dropdown-item text-sm"
-                >
-                  Profile
-                </Link>
-                <Link
-                  onClick={logout}
-                  tabIndex="-1"
-                  className="dropdown-item text-sm"
-                >
-                  Logout
-                </Link>
+                {userId ? (
+                  <>
+                    <Link
+                      to={`/profile/${userId}`}
+                      className="dropdown-item text-sm"
+                    >
+                      Profile
+                    </Link>
+                    <Link
+                      onClick={logout}
+                      tabIndex="-1"
+                      className="dropdown-item text-sm"
+                    >
+                      Logout
+                    </Link>
+                  </>
+                ) : (
+                  <Link
+                    to={"/login"}
+                    tabIndex="-1"
+                    className="dropdown-item text-sm"
+                  >
+                    Login
+                  </Link>
+                )}
               </div>
             </div>
           </div>

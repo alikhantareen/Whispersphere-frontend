@@ -15,7 +15,7 @@ const Home = () => {
     refetchOnWindowFocus: false,
     refetchIntervalInBackground: true,
   });
-  
+
   //the following function will fetch the data from api/blogs endpoint
   async function getBlogs() {
     try {
@@ -41,10 +41,7 @@ const Home = () => {
             data.map((elem, index) => {
               return (
                 <Link key={index} to={`/single-blog/${elem._id}`}>
-                  <Card
-                    title={elem.title}
-                    description={elem.description}
-                  />
+                  <Card title={elem.title} description={elem.description} />
                 </Link>
               );
             })
