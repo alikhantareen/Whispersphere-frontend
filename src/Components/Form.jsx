@@ -5,7 +5,8 @@ import { Editor } from "@tinymce/tinymce-react";
 import { Button } from "@material-tailwind/react";
 
 const Form = (props) => {
-  const { title, category, readtime, description, submitFunction } = props;
+  const { title, category, readtime, description, image, submitFunction } =
+    props;
   const editorRef = useRef(null);
   const tinymcData = () => {
     if (editorRef.current) {
@@ -18,21 +19,23 @@ const Form = (props) => {
       title: title,
       category: category,
       readTime: readtime,
-      file: "",
+      image: image,
     },
     validationSchema: Yup.object({
       title: Yup.string().required("Title required"),
       category: Yup.string().required("Category required"),
       readTime: Yup.string().required("Read time required"),
-      file: Yup.string().required("Image is required"),
+      image: Yup.mixed().required("Image is required")
     }),
     onSubmit: (values) => {
       const data = {
         title: values.title,
         category: values.category,
         read_time: values.readTime,
+        image: values.image,
         description: tinymcData(),
       };
+      // console.log(data);
       submitFunction(data);
     },
   });
@@ -40,6 +43,7 @@ const Form = (props) => {
     <form
       onSubmit={formik.handleSubmit}
       className="form-group w-full md:w-[50rem] flex flex-col gap-3 md:gap-4"
+      encType="multipart/form-data"
     >
       <div className="flex flex-col md:flex-row gap-4 items-center justify-around">
         <div className="flex flex-col items-center w-full">
@@ -97,15 +101,16 @@ const Form = (props) => {
         </div>
         <div className="flex flex-col w-full items-center">
           <input
-            id="file"
-            name="file"
-            onChange={formik.handleChange}
-            value={formik.values.file}
+            id="image"
+            name="image"
+            onChange={(e) =>
+              formik.setFieldValue("image", e.currentTarget.files[0])
+            }
             type="file"
             className="input-file"
           />
-          {formik.touched.file && formik.errors.file ? (
-            <div className="text-red-500">{formik.errors.file}</div>
+          {formik.touched.image && formik.errors.image ? (
+            <div className="text-red-500">{formik.errors.image}</div>
           ) : null}
         </div>
       </div>

@@ -4,12 +4,51 @@ import { useNavigate } from "react-router";
 import { Typography } from "@material-tailwind/react";
 import Cookies from "js-cookie";
 import Form from "../Components/Form";
+import axios from "axios";
 
 const AddBlog = () => {
   const navigate = useNavigate();
 
-  function log(values) {
-    console.log(values);
+  async function formSubmission(values) {
+    try {
+      const file = values.image;
+      const formData = new FormData();
+      formData.append("image", file);
+      const image_upload = await axios.post(
+        "http://localhost:5050/api/blogs/image",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            "x-rapidapi-host": "file-upload8.p.rapidapi.com",
+            "x-rapidapi-key": "your-rapidapi-key-here",
+          },
+        }
+      );
+      if (image_upload.data.success) {
+        const form_data = {
+          title: values.title,
+          description: values.description,
+          category: values.category,
+          read_time: values.read_time,
+          author: Cookies.get("user"),
+          image: image_upload.data.filename,
+        };
+
+        const form_upload = await axios.post(
+          "http://localhost:5050/api/blogs",
+          form_data,
+          {
+            headers: {
+              Authorization: `Bearer ${Cookies.get("token")}`,
+            },
+          }
+        );
+        navigate(`/single-blog/${form_upload.data._id}`);
+      }
+    } catch (error) {
+      console.warn(error);
+    }
   }
 
   useEffect(() => {
@@ -30,7 +69,14 @@ const AddBlog = () => {
             >
               Create a blog
             </Typography>
-            <Form title="" readtime="" category="" description="" submitFunction={log} />
+            <Form
+              title=""
+              readtime=""
+              image={undefined}
+              category=""
+              description=""
+              submitFunction={formSubmission}
+            />
           </section>
         </div>
       </section>

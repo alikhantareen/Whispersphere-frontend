@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Loader from "../Components/Loader";
 import { useParams } from "react-router";
+import parse from "html-react-parser";
 
 const SingleBlog = () => {
   const { id } = useParams();
@@ -19,8 +20,14 @@ const SingleBlog = () => {
   //the following function will fetch the data from api/blogs endpoint
   async function getSingleBlog(id) {
     try {
-      const response = await axios.get(`http://localhost:5050/api/blogs/${id}`);
-      const { data } = response;
+      const blog_data = await axios.get(
+        `http://localhost:5050/api/blogs/${id}`
+      );
+      const { data } = blog_data;
+      const image_getter = await axios.get(
+        `http://localhost:5050/api/blogs/image/${data.image}`
+      );
+      data.image_path = image_getter.config.url;
       return data;
     } catch (error) {
       console.warn(error);
@@ -35,15 +42,17 @@ const SingleBlog = () => {
         <section className="flex flex-col gap-4 p-4 justify-center items-center">
           <img
             className="rounded-lg"
-            src={data.image}
+            src={data.image_path}
             width={1080}
             alt="banner"
             loading="lazy"
           />
           <section className="p-2 w-full flex flex-col gap-4 justify-center rounded-lg max-w-[68rem]">
-            <Typography className="text-[#6c9d98]" variant="h1">{data.title}</Typography>
-            <Typography variant="paragraph">
-              {data.description}
+            <Typography className="text-[#6c9d98]" variant="h1">
+              {data.title}
+            </Typography>
+            <Typography id="descriptionContainer" variant="paragraph">
+              {parse(data.description)}
               <span className="text-slate-500 italic">
                 Written by: {data.author}
               </span>

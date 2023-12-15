@@ -41,7 +41,7 @@ const Home = () => {
             data.map((elem, index) => {
               return (
                 <Link key={index} to={`/single-blog/${elem._id}`}>
-                  <Card title={elem.title} description={elem.description} />
+                  <Card title={elem.title} read_time={elem.read_time} views={elem.views} />
                 </Link>
               );
             })
