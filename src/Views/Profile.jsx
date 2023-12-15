@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Navbar from "../Components/Navbar";
 import { Typography, Button } from "@material-tailwind/react";
 import { Link, useParams, useNavigate } from "react-router-dom";
@@ -51,20 +51,20 @@ const Profile = () => {
     <main>
       <Navbar />
       <section className="flex flex-col gap-8 p-4 justify-center items-center mt-4">
-        <section className="flex justify-start items-center gap-4 w-full md:max-w-[68rem]">
+        <section className="flex flex-col justify-start items-center gap-4 w-full md:max-w-[68rem]">
           <img src={avatar} width={80} alt="avatar" loading="lazy" />
-          <Typography variant="h1" className="text-[#6c9d98]">
+          <Typography variant="h1" className="text-[#6c9d98] text-2xl md:text-6xl">
             {isPending ? <span>...</span> : data.userInfo.name.toUpperCase()}
           </Typography>
         </section>
-        <section className="flex justify-between items-center gap-4 w-full md:max-w-[68rem]">
+        <section className="flex flex-col md:flex-row justify-between items-center gap-4 w-full md:max-w-[68rem]">
           <span className="flex gap-4 items-center">
-            <Typography variant="small">
+            <Typography variant="paragraph">
               Followers:{" "}
               {isPending ? <span>...</span> : data.userInfo.followers.length}
             </Typography>
             <Link to={"/"}>
-              <Typography className="link" variant="small">
+              <Typography className="link" variant="paragraph">
                 Following:{" "}
                 {isPending ? <span>...</span> : data.userInfo.following.length}
               </Typography>
@@ -78,7 +78,7 @@ const Profile = () => {
         </section>
         <section className="flex justify-start items-center gap-4 w-full md:max-w-[68rem]">
           <div className="flex flex-col gap-4">
-            <Typography variant="h1" className="underline text-[#6c9d98]">
+            <Typography variant="h1" className="underline text-[#6c9d98] text-2xl md:text-6xl">
               My Blogs
             </Typography>
             {isPending ? (

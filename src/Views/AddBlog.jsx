@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../Components/Navbar";
 import { useNavigate } from "react-router";
 import { Typography } from "@material-tailwind/react";
@@ -8,6 +8,7 @@ import axios from "axios";
 
 const AddBlog = () => {
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
 
   async function formSubmission(values) {
     try {
@@ -20,8 +21,6 @@ const AddBlog = () => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            "x-rapidapi-host": "file-upload8.p.rapidapi.com",
-            "x-rapidapi-key": "your-rapidapi-key-here",
           },
         }
       );
@@ -47,7 +46,7 @@ const AddBlog = () => {
         navigate(`/single-blog/${form_upload.data._id}`);
       }
     } catch (error) {
-      console.warn(error);
+      setError(error.response.data.message);
     }
   }
 
@@ -64,11 +63,18 @@ const AddBlog = () => {
         <div className="flex justify-center">
           <section className="flex flex-col justify-start items-start gap-4 w-full md:max-w-[68rem] mt-4">
             <Typography
-              className="self-center md:self-start text-[#6c9d98] underline mb-4"
+              className="self-center md:self-start text-[#6c9d98] underline mb-4 text-4xl md:text-6xl"
               variant="h1"
             >
               Create a blog
             </Typography>
+            {error ? (
+              <Typography className="text-red-500 text-center">
+                {error} 
+              </Typography>
+            ) : (
+              ""
+            )}
             <Form
               title=""
               readtime=""

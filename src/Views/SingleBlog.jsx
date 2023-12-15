@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "../Components/Navbar";
 import { Typography, Button, Tooltip } from "@material-tailwind/react";
 import { useQuery } from "@tanstack/react-query";
@@ -6,9 +6,11 @@ import axios from "axios";
 import Loader from "../Components/Loader";
 import { useParams } from "react-router";
 import parse from "html-react-parser";
+import { Link } from "react-router-dom";
 
 const SingleBlog = () => {
   const { id } = useParams();
+  const [error, setError] = useState(null);
   //query hook for caching the api's data
   const { isPending, data } = useQuery({
     queryKey: ["blog"],
@@ -27,10 +29,15 @@ const SingleBlog = () => {
       const image_getter = await axios.get(
         `http://localhost:5050/api/blogs/image/${data.image}`
       );
+      const user_data = await axios.get(
+        `http://localhost:5050/auth/get-user/${data.author}`
+      );
       data.image_path = image_getter.config.url;
+      data.author = user_data.data.name;
+      data.authorProfile = user_data.data._id;
       return data;
     } catch (error) {
-      console.warn(error);
+      setError(error.response.data.message);
     }
   }
   return (
@@ -38,6 +45,8 @@ const SingleBlog = () => {
       <Navbar />
       {isPending ? (
         <Loader />
+      ) : error ? (
+        <Typography className="text-red-500 text-center">{error}</Typography>
       ) : (
         <section className="flex flex-col gap-4 p-4 justify-center items-center">
           <img
@@ -53,9 +62,12 @@ const SingleBlog = () => {
             </Typography>
             <Typography id="descriptionContainer" variant="paragraph">
               {parse(data.description)}
-              <span className="text-slate-500 italic">
-                Written by: {data.author}
-              </span>
+              <Typography>
+                Written by:{" "}
+                <Link to={`/profile/${data.authorProfile}`} className="text-slate-500 italic link">
+                  {data.author}
+                </Link>
+              </Typography>
             </Typography>
             <div className="flex justify-start gap-4 w-full items-center">
               <Typography variant="small">

@@ -35,14 +35,13 @@ const Form = (props) => {
         image: values.image,
         description: tinymcData(),
       };
-      // console.log(data);
       submitFunction(data);
     },
   });
   return (
     <form
       onSubmit={formik.handleSubmit}
-      className="form-group w-full md:w-[50rem] flex flex-col gap-3 md:gap-4"
+      className="form-group w-full md:w-[50rem] flex flex-col gap-3 md:gap-4 p-2"
       encType="multipart/form-data"
     >
       <div className="flex flex-col md:flex-row gap-4 items-center justify-around">

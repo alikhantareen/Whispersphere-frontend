@@ -32,16 +32,28 @@ const Home = () => {
       <Navbar />
       <section className="flex justify-center">
         <section className="flex flex-col gap-4 w-full md:max-w-[68rem]">
-          <Typography variant="h1" color="white" className="underline p-2 text-[#6c9d98]">
+          <Typography
+            variant="h1"
+            color="white"
+            className="underline p-2 text-[#6c9d98] text-2xl md:text-6xl"
+          >
             All Blogs
           </Typography>
           {isPending ? (
             <Loader />
+          ) : data.length === 0 ? (
+            <Typography className="p-2" variant="paragraph" color="gray">
+              No blogs to show
+            </Typography>
           ) : (
             data.map((elem, index) => {
               return (
-                <Link key={index} to={`/single-blog/${elem._id}`}>
-                  <Card title={elem.title} read_time={elem.read_time} views={elem.views} />
+                <Link className="p-2" key={index} to={`/single-blog/${elem._id}`}>
+                  <Card
+                    title={elem.title}
+                    read_time={elem.read_time}
+                    views={elem.views}
+                  />
                 </Link>
               );
             })
