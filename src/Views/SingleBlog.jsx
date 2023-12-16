@@ -64,7 +64,10 @@ const SingleBlog = () => {
               {parse(data.description)}
               <Typography>
                 Written by:{" "}
-                <Link to={`/profile/${data.authorProfile}`} className="text-slate-500 italic link">
+                <Link
+                  to={`/user/${data.authorProfile}`}
+                  className="text-slate-500 italic link"
+                >
                   {data.author}
                 </Link>
               </Typography>

@@ -1,9 +1,8 @@
 import React from "react";
-import Navbar from "../Components/Navbar";
 import Usersection from "../Components/Usersection";
+import Navbar from "../Components/Navbar";
 
-const Profile = () => {
-
+const Users = () => {
   return (
     <main>
       <Navbar />
@@ -14,4 +13,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default Users;
