@@ -7,17 +7,34 @@ import Loader from "../Components/Loader";
 import { useParams } from "react-router";
 import parse from "html-react-parser";
 import { Link } from "react-router-dom";
+import Commentsection from "../Components/Commentsection";
+import Cookies from "js-cookie";
 
 const SingleBlog = () => {
   const { id } = useParams();
   const [error, setError] = useState(null);
   //query hook for caching the api's data
-  const { isPending, data } = useQuery({
+  const { isPending, data, refetch } = useQuery({
     queryKey: ["blog"],
     queryFn: () => getSingleBlog(id),
     refetchOnWindowFocus: false,
     refetchIntervalInBackground: true,
   });
+
+  async function addComment(data) {
+    const isCommentAdded = await axios.post(
+      `http://localhost:5050/api/blogs/comment/${id}`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      }
+    );
+    if (isCommentAdded.status === 201) {
+      refetch();
+    }
+  }
 
   //the following function will fetch the data from api/blogs endpoint
   async function getSingleBlog(id) {
@@ -94,7 +111,7 @@ const SingleBlog = () => {
                     clipRule="evenodd"
                   />
                 </svg>
-                {data.views}
+                {data.views.length}
               </Typography>
             </div>
           </section>
@@ -112,23 +129,11 @@ const SingleBlog = () => {
                 >
                   <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
                 </svg>
-                {data.likes}
+                {data.likes.length}
               </Button>
             </Tooltip>
           </section>
-          <section className="w-full md:max-w-[68rem] p-2">
-            <Typography variant="paragraph">Comments here</Typography>
-          </section>
-          <section className="w-full md:max-w-[68rem] p-2">
-            <textarea
-              className="textarea-block textarea"
-              rows={5}
-              placeholder="Type your comment here"
-            />
-            <Button color="teal" variant="gradient">
-              Comment
-            </Button>
-          </section>
+          <Commentsection comments={data.comments} add_comment={addComment} />
         </section>
       )}
     </main>

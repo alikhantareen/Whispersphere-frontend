@@ -24,8 +24,10 @@ const Login = () => {
       if (response) {
         const token = response.data.token;
         const userId = jwt.jwtDecode(token).id;
+        const userName = jwt.jwtDecode(token).user_name;
         Cookies.set("token", token, { expires: 7, secure: true });
         Cookies.set("user", userId, { expires: 7, secure: true });
+        Cookies.set("user_name", userName, { expires: 7, secure: true });
         navigate("/");
       }
     } catch (error) {

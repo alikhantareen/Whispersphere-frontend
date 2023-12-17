@@ -9,6 +9,7 @@ const Navbar = () => {
   function logout() {
     Cookies.remove("token");
     Cookies.remove("user");
+    Cookies.remove("user_name");
     navigate("/login");
   }
 

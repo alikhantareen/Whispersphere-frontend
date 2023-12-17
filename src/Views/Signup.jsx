@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import Cookies from "js-cookie";
-import * as jwt  from 'jwt-decode'
+import * as jwt from "jwt-decode";
 import { Button } from "@material-tailwind/react";
 
 const Signup = () => {
@@ -25,8 +25,10 @@ const Signup = () => {
       if (response) {
         const token = response.data.token;
         const userId = jwt.jwtDecode(token).id;
+        const userName = jwt.jwtDecode(token).user_name;
         Cookies.set("token", token, { expires: 7, secure: true });
         Cookies.set("user", userId, { expires: 7, secure: true });
+        Cookies.set("user_name", userName, { expires: 7, secure: true });
         navigate("/");
       }
     } catch (error) {
@@ -115,7 +117,7 @@ const Signup = () => {
           </div>
           <div className="form-field pt-5">
             <div className="form-control justify-between">
-            <Button
+              <Button
                 type="submit"
                 color="teal"
                 variant="gradient"
@@ -128,10 +130,7 @@ const Signup = () => {
 
           <div className="form-field">
             <div className="form-control justify-center">
-              <Link
-                to={"/login"}
-                className="link link-underline-hover text-sm"
-              >
+              <Link to={"/login"} className="link link-underline-hover text-sm">
                 Already have an account yet? Log in.
               </Link>
             </div>
