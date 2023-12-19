@@ -1,5 +1,5 @@
 import React from "react";
-import Usersection from "../Components/Usersection";
+import UserSection from "../Components/UserSection";
 import Navbar from "../Components/Navbar";
 
 const Users = () => {
@@ -7,7 +7,7 @@ const Users = () => {
     <main>
       <Navbar />
       <section className="flex flex-col gap-8 p-4 justify-center items-center mt-4">
-        <Usersection />
+        <UserSection />
       </section>
     </main>
   );

@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import Cookies from "js-cookie";
 
-const Commentsection = ({ comments, add_comment }) => {
+const CommentSection = ({ comments, add_comment }) => {
   const [showForm, setForm] = useState(false);
   //defining a form instance
   const formik = useFormik({
@@ -75,4 +75,4 @@ const Commentsection = ({ comments, add_comment }) => {
   );
 };
 
-export default Commentsection;
+export default CommentSection;

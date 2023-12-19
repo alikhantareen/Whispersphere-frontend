@@ -9,7 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const Usersection = () => {
+const UserSection = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [isRandom, setRandom] = useState(false);
@@ -122,4 +122,4 @@ const Usersection = () => {
   );
 };
 
-export default Usersection;
+export default UserSection;
