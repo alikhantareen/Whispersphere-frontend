@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Tooltip, Typography } from "@material-tailwind/react";
 import Cookies from "js-cookie";
 
-const LikeSection = ({ totalLikes, increment_likes, change_color }) => {
+const LikeSection = ({ totalLikes, increment_likes, error }) => {
   const [isLiked, setLikes] = useState(false);
   useEffect(() => {
     if (totalLikes.indexOf(Cookies.get("user")) !== -1) {
@@ -13,6 +13,7 @@ const LikeSection = ({ totalLikes, increment_likes, change_color }) => {
   return (
     <>
       <section className="w-full md:max-w-[68rem] p-2">
+        <Typography variant="small" color="red">{error}</Typography>
         <Tooltip content="Like this post">
           <Button
             onClick={() => increment_likes(Cookies.get("user"))}

@@ -14,6 +14,7 @@ const LikeSection = lazy(() => import("../Components/LikeSection"));
 const SingleBlog = () => {
   const { id } = useParams();
   const [error, setError] = useState(null);
+  const [alreadyLiked, setAlreadyLiked] = useState(null);
   //query hook for caching the api's data
   const { isPending, data, refetch } = useQuery({
     queryKey: ["blog"],
@@ -55,7 +56,7 @@ const SingleBlog = () => {
         refetch();
       }
     } catch (error) {
-      console.warn(error);
+      setAlreadyLiked(error.response.data.message);
     }
   }
 
@@ -143,6 +144,7 @@ const SingleBlog = () => {
             <LikeSection
               totalLikes={data.likes}
               increment_likes={incrementLikes}
+              error={alreadyLiked}
             />
           </Suspense>
           <Suspense fallback={<Loader />}>
