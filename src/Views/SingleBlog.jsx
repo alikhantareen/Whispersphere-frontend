@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, lazy, Suspense } from "react";
 import Navbar from "../Components/Navbar";
 import { Typography, Button, Tooltip } from "@material-tailwind/react";
 import { useQuery } from "@tanstack/react-query";
@@ -7,8 +7,8 @@ import Loader from "../Components/Loader";
 import { useParams } from "react-router";
 import parse from "html-react-parser";
 import { Link } from "react-router-dom";
-import Commentsection from "../Components/Commentsection";
 import Cookies from "js-cookie";
+const CommentSection = lazy(() => import("../Components/Commentsection"));
 
 const SingleBlog = () => {
   const { id } = useParams();
@@ -133,7 +133,9 @@ const SingleBlog = () => {
               </Button>
             </Tooltip>
           </section>
-          <Commentsection comments={data.comments} add_comment={addComment} />
+          <Suspense fallback={<Loader />}>
+            <CommentSection comments={data.comments} add_comment={addComment} />
+          </Suspense>
         </section>
       )}
     </main>

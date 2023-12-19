@@ -52,7 +52,7 @@ const Home = () => {
                   <Card
                     title={elem.title}
                     read_time={elem.read_time}
-                    views={elem.views}
+                    views={elem.views.length}
                   />
                 </Link>
               );
