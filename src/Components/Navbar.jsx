@@ -1,16 +1,15 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
 
 const Navbar = () => {
-  const navigate = useNavigate();
   const userId = Cookies.get("user");
 
   function logout() {
     Cookies.remove("token");
     Cookies.remove("user");
     Cookies.remove("user_name");
-    navigate("/login");
+    window.location.assign("/")
   }
 
   return (

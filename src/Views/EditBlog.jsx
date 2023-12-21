@@ -17,13 +17,13 @@ const EditBlog = () => {
   //query hook for caching the api's data
   const { isPending, data } = useQuery({
     queryKey: ["edit_blog"],
-    queryFn: () => getSingleBlog(id),
+    queryFn: () => getBlogToEdit(id),
     refetchOnWindowFocus: false,
     refetchIntervalInBackground: true,
   });
 
   //the following function will fetch the data from api/blogs endpoint
-  async function getSingleBlog(id) {
+  async function getBlogToEdit(id) {
     try {
       const blog_data = await axios.get(
         `http://localhost:5050/api/blogs/${id}`

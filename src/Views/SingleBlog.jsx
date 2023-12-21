@@ -18,7 +18,7 @@ const SingleBlog = () => {
   const [alreadyLiked, setAlreadyLiked] = useState(null);
 
   //query hook for caching the api's data
-  const { isPending, data, refetch } = useQuery({
+  const { isFetching, data, refetch } = useQuery({
     queryKey: ["blog"],
     queryFn: () => getSingleBlog(id),
     refetchOnWindowFocus: false,
@@ -87,7 +87,7 @@ const SingleBlog = () => {
   return (
     <main>
       <Navbar />
-      {isPending ? (
+      {isFetching ? (
         <Loader />
       ) : error ? (
         <Typography className="text-red-500 text-center">{error}</Typography>

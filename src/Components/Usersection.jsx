@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import {
   Typography,
@@ -8,7 +8,7 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import Loader from "./Loader";
 import Card from "./Card";
@@ -17,15 +17,16 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const UserSection = () => {
-  const navigate = useNavigate();
+  const closeDialog = useRef();
   const { id } = useParams();
-  const [isRandom, setRandom] = useState(false);
   const [open, setOpen] = useState(false);
+  const [itemID, setItemId] = useState(null);
   const handleOpen = () => {
-    setOpen(!open)
+    setOpen(!open);
   };
+
   //query hook for caching the api's data
-  const { isPending, data } = useQuery({
+  const { isPending, data, refetch } = useQuery({
     queryKey: ["user_blogs"],
     queryFn: () => getUserData(id),
     refetchOnWindowFocus: false,
@@ -52,15 +53,28 @@ const UserSection = () => {
     }
   }
 
-  useEffect(() => {
-    if (id === Cookies.get("user")) {
-      navigate(`/profile/${id}`);
-    } else if (window.location.href.includes("user")) {
-      setRandom(true);
-    } else {
-      navigate("/");
+  const loggedInUserId = Cookies.get("user");
+  const isRandom = loggedInUserId !== id;
+
+  async function deleteBlog(id) {
+    try {
+      const isDeleted = await axios.delete(
+        `http://localhost:5050/api/blogs/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
+        }
+      );
+      if (isDeleted.status === 200) {
+        closeDialog.current.click();
+        refetch();
+      }
+    } catch (error) {
+      console.warn(error);
     }
-  }, []);
+  }
+
   return (
     <>
       <section className="flex flex-col justify-start items-center gap-4 w-full md:max-w-[68rem]">
@@ -125,7 +139,7 @@ const UserSection = () => {
                     <Card
                       title={elem.title}
                       read_time={elem.read_time}
-                      views={elem.views}
+                      views={elem.views.length}
                     />
                   </Link>
                   {!isRandom && (
@@ -140,7 +154,14 @@ const UserSection = () => {
                         <div className="popover-arrow"></div>
                         <div className="p-4 text-sm flex flex-col gap-4">
                           <Link to={`/editblog/${elem._id}`}>Edit</Link>
-                          <Link onClick={handleOpen}>Delete</Link>
+                          <Link
+                            onClick={() => {
+                              setItemId(elem._id);
+                              handleOpen();
+                            }}
+                          >
+                            Delete
+                          </Link>
                         </div>
                       </div>
                     </div>
@@ -150,20 +171,41 @@ const UserSection = () => {
             })
           )}
         </div>
+        <DialogBox
+          blogID={itemID}
+          state={open}
+          handler={handleOpen}
+          deleteFunc={deleteBlog}
+          closeDialog={closeDialog}
+        />
       </section>
-      <Dialog open={open} handler={handleOpen}>
+    </>
+  );
+};
+
+export default UserSection;
+
+const DialogBox = ({ blogID, state, handler, deleteFunc, closeDialog }) => {
+  return (
+    <>
+      <Dialog open={state} handler={handler}>
         <DialogHeader>Alert!</DialogHeader>
         <DialogBody>Do you want to delete the blog?</DialogBody>
         <DialogFooter>
           <Button
+            ref={closeDialog}
             variant="text"
             color="red"
-            onClick={handleOpen}
+            onClick={handler}
             className="mr-1"
           >
             <span>Cancel</span>
           </Button>
-          <Button variant="gradient" color="green" onClick={handleOpen}>
+          <Button
+            variant="gradient"
+            color="green"
+            onClick={() => deleteFunc(blogID)}
+          >
             <span>Confirm</span>
           </Button>
         </DialogFooter>
@@ -171,5 +213,3 @@ const UserSection = () => {
     </>
   );
 };
-
-export default UserSection;
