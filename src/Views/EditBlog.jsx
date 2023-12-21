@@ -15,7 +15,7 @@ const EditBlog = () => {
   const { id } = useParams();
 
   //query hook for caching the api's data
-  const { isPending, data, refetch } = useQuery({
+  const { isPending, data } = useQuery({
     queryKey: ["edit_blog"],
     queryFn: () => getSingleBlog(id),
     refetchOnWindowFocus: false,
@@ -110,6 +110,7 @@ const EditBlog = () => {
                 category={data.category}
                 description={data.description}
                 submitFunction={formSubmission}
+                buttonContent="Save"
               />
             )}
           </section>

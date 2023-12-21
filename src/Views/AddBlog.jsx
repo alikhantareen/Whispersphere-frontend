@@ -82,6 +82,7 @@ const AddBlog = () => {
               category=""
               description=""
               submitFunction={formSubmission}
+              buttonContent="Create"
             />
           </section>
         </div>

@@ -5,7 +5,7 @@ import { Editor } from "@tinymce/tinymce-react";
 import { Button } from "@material-tailwind/react";
 
 const Form = (props) => {
-  const { title, category, readtime, description, image, submitFunction } =
+  const { title, category, readtime, description, image, submitFunction, buttonContent } =
     props;
   const editorRef = useRef(null);
   const tinymcData = () => {
@@ -157,7 +157,7 @@ const Form = (props) => {
         color="teal"
         variant="gradient"
       >
-        Create
+        {buttonContent}
       </Button>
     </form>
   );
