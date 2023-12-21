@@ -6,6 +6,7 @@ import SingleBlog from "./Views/SingleBlog";
 import Profile from "./Views/Profile";
 import AddBlog from "./Views/AddBlog";
 import Users from "./Views/Users";
+import EditBlog from "./Views/EditBlog";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/profile/:id" element={<Profile />} />
         <Route path="/user/:id" element={<Users />} />
         <Route path="/single-blog/:id" element={<SingleBlog />} />
+        <Route path="/editblog/:id" element={<EditBlog />} />
         <Route path="/addblog" element={<AddBlog />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />

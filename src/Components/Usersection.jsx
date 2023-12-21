@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Typography, Button } from "@material-tailwind/react";
-import Loader from "./Loader";
-import avatar from "../assets/avatar.png";
-import Card from "./Card";
+import {
+  Typography,
+  Button,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+} from "@material-tailwind/react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import Loader from "./Loader";
+import Card from "./Card";
+import avatar from "../assets/avatar.png";
 import axios from "axios";
 import Cookies from "js-cookie";
 
@@ -13,7 +20,10 @@ const UserSection = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [isRandom, setRandom] = useState(false);
-
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => {
+    setOpen(!open)
+  };
   //query hook for caching the api's data
   const { isPending, data } = useQuery({
     queryKey: ["user_blogs"],
@@ -90,7 +100,7 @@ const UserSection = () => {
         )}
       </section>
       <section className="flex justify-start items-center gap-4 w-full md:max-w-[68rem]">
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 w-full">
           <Typography
             variant="h1"
             className="underline text-[#6c9d98] text-2xl md:text-6xl"
@@ -106,18 +116,58 @@ const UserSection = () => {
           ) : (
             data.blogs.map((elem, index) => {
               return (
-                <Link key={index} to={`/single-blog/${elem._id}`}>
-                  <Card
-                    title={elem.title}
-                    read_time={elem.read_time}
-                    views={elem.views}
-                  />
-                </Link>
+                <div className="flex gap-4">
+                  <Link
+                    className="flex-1"
+                    key={index}
+                    to={`/single-blog/${elem._id}`}
+                  >
+                    <Card
+                      title={elem.title}
+                      read_time={elem.read_time}
+                      views={elem.views}
+                    />
+                  </Link>
+                  {!isRandom && (
+                    <div className="popover">
+                      <label
+                        className="popover-trigger my-2 cursor-pointer link underline"
+                        tabIndex="0"
+                      >
+                        Options
+                      </label>
+                      <div className="popover-content" tabIndex="0">
+                        <div className="popover-arrow"></div>
+                        <div className="p-4 text-sm flex flex-col gap-4">
+                          <Link to={`/editblog/${elem._id}`}>Edit</Link>
+                          <Link onClick={handleOpen}>Delete</Link>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               );
             })
           )}
         </div>
       </section>
+      <Dialog open={open} handler={handleOpen}>
+        <DialogHeader>Alert!</DialogHeader>
+        <DialogBody>Do you want to delete the blog?</DialogBody>
+        <DialogFooter>
+          <Button
+            variant="text"
+            color="red"
+            onClick={handleOpen}
+            className="mr-1"
+          >
+            <span>Cancel</span>
+          </Button>
+          <Button variant="gradient" color="green" onClick={handleOpen}>
+            <span>Confirm</span>
+          </Button>
+        </DialogFooter>
+      </Dialog>
     </>
   );
 };

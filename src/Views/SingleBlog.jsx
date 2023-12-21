@@ -12,9 +12,11 @@ const CommentSection = lazy(() => import("../Components/CommentSection"));
 const LikeSection = lazy(() => import("../Components/LikeSection"));
 
 const SingleBlog = () => {
+  
   const { id } = useParams();
   const [error, setError] = useState(null);
   const [alreadyLiked, setAlreadyLiked] = useState(null);
+
   //query hook for caching the api's data
   const { isPending, data, refetch } = useQuery({
     queryKey: ["blog"],

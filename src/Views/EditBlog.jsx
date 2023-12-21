@@ -1,14 +1,39 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { Typography } from "@material-tailwind/react";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router";
 import Navbar from "../Components/Navbar";
 import Cookies from "js-cookie";
 import Form from "../Components/Form";
 import axios from "axios";
+import Loader from "../Components/Loader";
 
-const AddBlog = () => {
+const EditBlog = () => {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
+  const { id } = useParams();
+
+  //query hook for caching the api's data
+  const { isPending, data, refetch } = useQuery({
+    queryKey: ["edit_blog"],
+    queryFn: () => getSingleBlog(id),
+    refetchOnWindowFocus: false,
+    refetchIntervalInBackground: true,
+  });
+
+  //the following function will fetch the data from api/blogs endpoint
+  async function getSingleBlog(id) {
+    try {
+      const blog_data = await axios.get(
+        `http://localhost:5050/api/blogs/${id}`
+      );
+      const { data } = blog_data;
+      return data;
+    } catch (error) {
+      setError(error.response.data.message);
+    }
+  }
 
   async function formSubmission(values) {
     try {
@@ -34,8 +59,8 @@ const AddBlog = () => {
           image: image_upload.data.filename,
         };
 
-        const form_upload = await axios.post(
-          "http://localhost:5050/api/blogs",
+        const form_upload = await axios.put(
+          `http://localhost:5050/api/blogs/${id}`,
           form_data,
           {
             headers: {
@@ -66,23 +91,27 @@ const AddBlog = () => {
               className="self-center md:self-start text-[#6c9d98] underline mb-4 text-4xl md:text-6xl"
               variant="h1"
             >
-              Create a blog
+              Edit a blog
             </Typography>
             {error ? (
               <Typography className="text-red-500 text-center">
-                {error} 
+                {error}
               </Typography>
             ) : (
               ""
             )}
-            <Form
-              title=""
-              readtime=""
-              image={undefined}
-              category=""
-              description=""
-              submitFunction={formSubmission}
-            />
+            {isPending ? (
+              <Loader />
+            ) : (
+              <Form
+                title={data.title}
+                readtime={data.read_time}
+                image={undefined}
+                category={data.category}
+                description={data.description}
+                submitFunction={formSubmission}
+              />
+            )}
           </section>
         </div>
       </section>
@@ -90,4 +119,4 @@ const AddBlog = () => {
   );
 };
 
-export default AddBlog;
+export default EditBlog;
