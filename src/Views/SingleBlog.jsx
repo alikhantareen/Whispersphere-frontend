@@ -12,7 +12,6 @@ const CommentSection = lazy(() => import("../Components/CommentSection"));
 const LikeSection = lazy(() => import("../Components/LikeSection"));
 
 const SingleBlog = () => {
-  
   const { id } = useParams();
   const [error, setError] = useState(null);
   const [alreadyLiked, setAlreadyLiked] = useState(null);
@@ -142,16 +141,23 @@ const SingleBlog = () => {
               </Typography>
             </div>
           </section>
-          <Suspense fallback={<Loader />}>
-            <LikeSection
-              totalLikes={data.likes}
-              increment_likes={incrementLikes}
-              error={alreadyLiked}
-            />
-          </Suspense>
-          <Suspense fallback={<Loader />}>
-            <CommentSection comments={data.comments} add_comment={addComment} />
-          </Suspense>
+          {Cookies.get("user") && (
+            <>
+              <Suspense fallback={<Loader />}>
+                <LikeSection
+                  totalLikes={data.likes}
+                  increment_likes={incrementLikes}
+                  error={alreadyLiked}
+                />
+              </Suspense>
+              <Suspense fallback={<Loader />}>
+                <CommentSection
+                  comments={data.comments}
+                  add_comment={addComment}
+                />
+              </Suspense>
+            </>
+          )}
         </section>
       )}
     </main>
