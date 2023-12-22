@@ -1,4 +1,4 @@
-import React, { useState, lazy, Suspense } from "react";
+import React, { useState, lazy, Suspense, useEffect } from "react";
 import { useParams } from "react-router";
 import { Typography } from "@material-tailwind/react";
 import { useQuery } from "@tanstack/react-query";
@@ -61,6 +61,26 @@ const SingleBlog = () => {
     }
   }
 
+  async function getViews(id) {
+    try {
+      const data = {
+        userID: Cookies.get("user"),
+      };
+      await axios.post(
+        `http://localhost:5050/api/blogs/views/${id}`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
+        }
+      );
+      return;
+    } catch (error) {
+      console.warn(error);
+    }
+  }
+
   //the following function will fetch the data from api/blogs endpoint
   async function getSingleBlog(id) {
     try {
@@ -82,6 +102,10 @@ const SingleBlog = () => {
       setError(error.response.data.message);
     }
   }
+
+  useEffect(() => {
+    getViews(id);
+  }, []);
 
   return (
     <main>
