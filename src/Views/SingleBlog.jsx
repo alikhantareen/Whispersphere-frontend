@@ -66,15 +66,11 @@ const SingleBlog = () => {
       const data = {
         userID: Cookies.get("user"),
       };
-      await axios.post(
-        `http://localhost:5050/api/blogs/views/${id}`,
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("token")}`,
-          },
-        }
-      );
+      await axios.post(`http://localhost:5050/api/blogs/views/${id}`, data, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      });
       return;
     } catch (error) {
       console.warn(error);
@@ -104,7 +100,9 @@ const SingleBlog = () => {
   }
 
   useEffect(() => {
-    getViews(id);
+    if (Cookies.get("user")) {
+      getViews(id);
+    }
   }, []);
 
   return (
