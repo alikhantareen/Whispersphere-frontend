@@ -1,18 +1,18 @@
-import { Card, CardBody, Typography } from "@material-tailwind/react";
+import { Typography } from "@material-tailwind/react";
 
 function BlogCard({ title, read_time, views }) {
   return (
-    <Card className="w-full overflow-hidden bg-[#161616]">
-      <CardBody>
-        <Typography variant="h2" className="text-[#6c9d98] text-2xl md:text-4xl">
+    <div className="shadow-sm rounded-md shadow-[#6c9d98]">
+      <div className="card-body">
+        <Typography variant="h2" className="text-[#6c9d98]">
           {title}
         </Typography>
-        <Typography variant="small" color="white" className="mt-3 flex gap-4">
-          <span>Read time: {read_time}</span>
-          <span>Total views: {views}</span>
-        </Typography>
-      </CardBody>
-    </Card>
+        <div className="text-content2 flex gap-4 items-center">
+          <Typography variant="paragraph">Read time: {read_time}</Typography>
+          <Typography variant="paragraph">Total views: {views}</Typography>
+        </div>
+      </div>
+    </div>
   );
 }
 

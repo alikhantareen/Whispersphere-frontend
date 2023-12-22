@@ -145,15 +145,16 @@ const UserSection = () => {
                   {!isRandom && (
                     <div className="popover">
                       <label
-                        className="popover-trigger my-2 cursor-pointer link underline"
+                        className="popover-trigger my-2 cursor-pointer link btn btn-group-rounded btn-group-scrollable"
                         tabIndex="0"
                       >
                         Options
                       </label>
                       <div className="popover-content" tabIndex="0">
                         <div className="popover-arrow"></div>
-                        <div className="p-4 text-sm flex flex-col gap-4">
+                        <div className="p-2 text-sm flex flex-col">
                           <Link to={`/editblog/${elem._id}`}>Edit</Link>
+                          <div className="divider"></div>
                           <Link
                             onClick={() => {
                               setItemId(elem._id);

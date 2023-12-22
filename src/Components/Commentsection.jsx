@@ -66,7 +66,7 @@ const CommentSection = ({ comments, add_comment }) => {
             </Button>
           </form>
         ) : (
-          <Button onClick={() => setForm(true)} color="white" variant="text">
+          <Button onClick={() => setForm(true)} color="teal" variant="text">
             Add comment
           </Button>
         )}

@@ -53,7 +53,7 @@ const Form = (props) => {
             value={formik.values.title}
             type="text"
             placeholder="Type title..."
-            className="text-white input"
+            className="input"
           />
           {formik.touched.title && formik.errors.title ? (
             <div className="text-red-500">{formik.errors.title}</div>
@@ -65,7 +65,7 @@ const Form = (props) => {
             id="category"
             name="category"
             onChange={formik.handleChange}
-            className="text-white select select-ghost-primary"
+            className="select select-ghost-primary"
           >
             <option value="" selected disabled>
               Choose category
@@ -92,7 +92,7 @@ const Form = (props) => {
             value={formik.values.readTime}
             type="text"
             placeholder="Total read time..."
-            className="text-white input"
+            className="input"
           />
           {formik.touched.readTime && formik.errors.readTime ? (
             <div className="text-red-500">{formik.errors.readTime}</div>

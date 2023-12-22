@@ -1,11 +1,11 @@
 import React from "react";
-import Navbar from "../Components/Navbar";
-import Card from "../Components/Card";
+import { Link } from "react-router-dom";
 import { Typography } from "@material-tailwind/react";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import Navbar from "../Components/Navbar";
+import Card from "../Components/Card";
 import Loader from "../Components/Loader";
-import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Home = () => {
   //query hook for caching the api's data
