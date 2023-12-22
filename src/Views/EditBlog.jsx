@@ -15,7 +15,7 @@ const EditBlog = () => {
   const { id } = useParams();
 
   //query hook for caching the api's data
-  const { isPending, data } = useQuery({
+  const { isFetching, data } = useQuery({
     queryKey: ["edit_blog"],
     queryFn: () => getBlogToEdit(id),
     refetchOnWindowFocus: false,
@@ -100,7 +100,7 @@ const EditBlog = () => {
             ) : (
               ""
             )}
-            {isPending ? (
+            {isFetching ? (
               <Loader />
             ) : (
               <Form

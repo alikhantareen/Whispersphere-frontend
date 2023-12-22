@@ -26,7 +26,7 @@ const UserSection = () => {
   };
 
   //query hook for caching the api's data
-  const { isPending, data, refetch } = useQuery({
+  const { isFetching, data, refetch } = useQuery({
     queryKey: ["user_blogs"],
     queryFn: () => getUserData(id),
     refetchOnWindowFocus: false,
@@ -83,19 +83,19 @@ const UserSection = () => {
           variant="h1"
           className="text-[#6c9d98] text-2xl md:text-6xl"
         >
-          {isPending ? <span>...</span> : data.userInfo.name.toUpperCase()}
+          {isFetching ? <span>...</span> : data.userInfo.name.toUpperCase()}
         </Typography>
       </section>
       <section className="flex flex-col md:flex-row justify-between items-center gap-4 w-full md:max-w-[68rem]">
         <span className="flex gap-4 items-center">
           <Typography variant="paragraph">
             Followers:{" "}
-            {isPending ? <span>...</span> : data.userInfo.followers.length}
+            {isFetching ? <span>...</span> : data.userInfo.followers.length}
           </Typography>
           <Link to={"/"}>
             <Typography className="link" variant="paragraph">
               Following:{" "}
-              {isPending ? <span>...</span> : data.userInfo.following.length}
+              {isFetching ? <span>...</span> : data.userInfo.following.length}
             </Typography>
           </Link>
         </span>
@@ -121,7 +121,7 @@ const UserSection = () => {
           >
             My Blogs
           </Typography>
-          {isPending ? (
+          {isFetching ? (
             <Loader />
           ) : data.blogs.length === 0 ? (
             <Typography variant="paragraph" color="gray">
@@ -130,7 +130,7 @@ const UserSection = () => {
           ) : (
             data.blogs.map((elem, index) => {
               return (
-                <div className="flex gap-4">
+                <div className="flex flex-col md:flex-row gap-4">
                   <Link
                     className="flex-1"
                     key={index}
@@ -143,9 +143,9 @@ const UserSection = () => {
                     />
                   </Link>
                   {!isRandom && (
-                    <div className="popover">
+                    <div className="popover w-full md:w-fit">
                       <label
-                        className="popover-trigger my-2 cursor-pointer link btn btn-group-rounded btn-group-scrollable"
+                        className="w-full md:w-fit popover-trigger my-2 cursor-pointer link btn btn-group-rounded btn-group-scrollable"
                         tabIndex="0"
                       >
                         Options

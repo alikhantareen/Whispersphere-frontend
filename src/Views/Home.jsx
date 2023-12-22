@@ -9,7 +9,7 @@ import axios from "axios";
 
 const Home = () => {
   //query hook for caching the api's data
-  const { isPending, data } = useQuery({
+  const { isFetching, data } = useQuery({
     queryKey: ["blogs"],
     queryFn: getBlogs,
     refetchOnWindowFocus: false,
@@ -39,7 +39,7 @@ const Home = () => {
           >
             All Blogs
           </Typography>
-          {isPending ? (
+          {isFetching ? (
             <Loader />
           ) : data.length === 0 ? (
             <Typography className="p-2" variant="paragraph" color="gray">
